@@ -47,7 +47,7 @@ public class DatabaseTest
      /**
       * To execute an SQL statement that is not a SELECT statement.
       */
-      public void testNonSelectStatements() throws Exception
+      public static void testNonSelectStatements() throws Exception
       {
           // Using a PreparedStatement to insert a value (best option when providing values
           // from variables).
@@ -59,7 +59,7 @@ public class DatabaseTest
           stmt2.setString(2, "2");
           stmt2.setString(3, "'hello'");
           stmt2.setString(4, "'This is a longer string'");
-          stmt2.setString(5, '55.55');
+          stmt2.setString(5, "55.55");
           
           // When I need to set a primitive type as null.
           //stmt2.setNull(2, java.sql.Types.INTEGER);
@@ -70,7 +70,7 @@ public class DatabaseTest
           }
       }
      
-    public static void main(String args[]) throws SQLException
+    public static void main(String args[]) throws Exception
     {
     	System.out.println("Hello");
     	
@@ -84,5 +84,7 @@ public class DatabaseTest
     	    * To get the meta data for the DB.
     	    */
     	    DatabaseMetaData meta = m_dbConn.getMetaData();
+    	    
+    	    testNonSelectStatements();
     }
 }
