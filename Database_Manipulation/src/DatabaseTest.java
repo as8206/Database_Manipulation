@@ -92,7 +92,7 @@ public class DatabaseTest
      
     public static void main(String args[]) throws Exception
     {
-    	int[] insertNoPK = new int[10];
+    	double[] insertNoPK = new double[10];
     	long time;
     	
     	/** 
@@ -104,25 +104,25 @@ public class DatabaseTest
     	   /**
     	    * To get the meta data for the DB.
     	    */
-//    	    DatabaseMetaData meta = m_dbConn.getMetaData();
-//    	    
-//    	    for(int i = 0; i < 10; i++)
-//    	    {
-//    	    	remakeNoPKTable();
-//    	    	time = testNonSelectStatements();
-//    	    	insertNoPK[i] = (int) time / 1000;
-//    	    }
-//    	    
-//    	    for(int i = 0; i < 10; i++)
-//    	    {
-//    	    	System.out.println("Time for no PK insertion " + (i+1) + ": " + insertNoPK[i]);
-//    	    }
-    	    remakeNoPKTable();
+    	    DatabaseMetaData meta = m_dbConn.getMetaData();
+    	    
+    	    for(int i = 0; i < 10; i++)
+    	    {
+    	    	remakeNoPKTable();
+    	    	time = testNonSelectStatements();
+    	    	insertNoPK[i] = time / (double)1000;
+    	    	System.out.println("No PK insertion " + (i+1) + " complete.");
+    	    }
+    	    
+    	    for(int i = 0; i < 10; i++)
+    	    {
+    	    	System.out.println("Time for no PK insertion " + (i+1) + ": " + insertNoPK[i]);
+    	    }
     }
 
 	private static void remakeNoPKTable() throws Exception
 	{
-		String string = "DROP TABLE TEST_STAKE_NOPK;";
+		String string = "DROP TABLE IF EXISTS TEST_STAKE_NOPK;";
         PreparedStatement statement = m_dbConn.prepareStatement(string);
         statement.executeUpdate();
         string = "CREATE TABLE TEST_STAKE_NOPK (Id INT, num2 INT, short CHAR(10), extended VARCHAR(30), exact DOUBLE);";
