@@ -15,9 +15,9 @@ public class DatabaseTest
 	/**
      * You MUST change these values based on the DB you are assigned to work with.
      */
-     public static final String DB_LOCATION = "jdbc:mysql://localhost/test";
-     public static final String LOGIN_NAME = "andrew";
-     public static final String PASSWORD = "an99Mi32st";   //TODO change to correct Database
+     public static final String DB_LOCATION = "jdbc:mysql://db.cs.ship.edu:3306/csc371_33";
+     public static final String LOGIN_NAME = "csc371_33";
+     public static final String PASSWORD = "Password33";   //TODO change to correct Database
      
      // Make sure and use the java.sql imports.
      protected static Connection m_dbConn = null;
