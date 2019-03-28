@@ -177,7 +177,7 @@ public class DatabaseTest
 
     private static void prepareDatabaseCache() throws Exception
     {
-    	String select = "SELECT FROM TEST_STAKE_PK WHERE Id = 4806";
+    	String select = "SELECT * FROM TEST_STAKE_PK WHERE Id = 4806";
         PreparedStatement statement = m_dbConn.prepareStatement(select);
         System.out.println("Time for select from Id (col 1) : " + timeSingleStatement(statement));	
 	}
@@ -207,7 +207,7 @@ public class DatabaseTest
 	private static double timeSingleStatement(PreparedStatement statement) throws Exception
 	{
 		long starttime = System.currentTimeMillis();
-		statement.executeUpdate();
+		statement.executeQuery();
 		long endtime = System.currentTimeMillis();
 		return (endtime-starttime) / (double) 1000;
 	}
