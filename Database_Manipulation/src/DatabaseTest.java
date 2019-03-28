@@ -16,7 +16,7 @@ public class DatabaseTest
      */
      public static final String DB_LOCATION = "jdbc:mysql://localhost/test";
      public static final String LOGIN_NAME = "andrew";
-     public static final String PASSWORD = "an99Mi32st";   //TODO these are what need to be changed
+     public static final String PASSWORD = "an99Mi32st";   //TODO change to correct Database
      
      // Make sure and use the java.sql imports.
      protected static Connection m_dbConn = null;
@@ -61,7 +61,7 @@ public class DatabaseTest
           
           long startTime = System.currentTimeMillis();
           
-          for(int i = 0; i < 5000; i++)
+          for(int i = 0; i < 5000; i++) //TODO set to 500000
           {
         	  insertString = new String("INSERT INTO TEST_STAKE_NOPK (Id, num2, short, extended, exact) VALUES (?,?,?,?,?)");
         	  insertion = m_dbConn.prepareStatement(insertString);
@@ -100,7 +100,7 @@ public class DatabaseTest
           
           long startTime = System.currentTimeMillis();
           
-          for(int i = 0; i < 5000; i++)
+          for(int i = 0; i < 5000; i++) //TODO set to 500000
           {
         	  insertString = new String("INSERT INTO TEST_STAKE_PK (Id, num2, short, extended, exact) VALUES (?,?,?,?,?)");
         	  insertion = m_dbConn.prepareStatement(insertString);
@@ -169,7 +169,7 @@ public class DatabaseTest
     	    
     	    for(int i = 0; i < 10; i++)
     	    {
-    	    	System.out.println("Time for PK insertion " + (i+1) + ": " + insertNoPK[i]);
+    	    	System.out.println("Time for PK insertion " + (i+1) + ": " + insertPK[i]);
     	    }
     }
 
