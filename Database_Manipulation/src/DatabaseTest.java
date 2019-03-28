@@ -123,6 +123,29 @@ public class DatabaseTest
           long totalTime = endTime - startTime;
           return totalTime;
       }
+      
+      public static long testSelectsPKCol() throws Exception
+      {
+    	  String select = "SELECT * FROM TEST_STAKE_PK WHERE Id = ?;";
+          PreparedStatement statement = m_dbConn.prepareStatement(select);
+          
+          long startTime = System.currentTimeMillis();
+          
+          for(int i = 0; i < 100; i++)
+          {
+        	  statement.setString(1, Integer.toString((int) (Math.random() * 5000 + 1)));
+        	  statement.executeQuery();
+          }
+    	  
+          long endTime = System.currentTimeMillis();
+          long totalTime = endTime - startTime;
+          return totalTime;
+      }
+      
+      public static long testSelectsNoPkCol()
+      {
+    	  return 0;
+      }
      
     public static void main(String args[]) throws Exception
     {
@@ -173,6 +196,8 @@ public class DatabaseTest
 //    	    	System.out.println("Time for PK insertion " + (i+1) + ": " + insertPK[i]);
 //    	    }
     	    prepareDatabaseCache();
+    	    
+    	    System.out.println(testSelectsPKCol());
     }
 
     private static void prepareDatabaseCache() throws Exception
