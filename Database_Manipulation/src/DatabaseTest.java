@@ -48,7 +48,7 @@ public class DatabaseTest
      /**
       * To execute an SQL statement that is not a SELECT statement.
       */
-      public static void testNonSelectStatements() throws Exception
+      public static long testNonSelectStatements() throws Exception
       {
           // Using a PreparedStatement to insert a value (best option when providing values
           // from variables).
@@ -60,6 +60,9 @@ public class DatabaseTest
           String insertString;
           PreparedStatement insertion;
           String condition1, condition2, condition3, condition4, condition5;
+          
+          long startTime = System.currentTimeMillis();
+          
           for(int i = 0; i < 5000; i++)
           {
         	  insertString = new String("INSERT INTO TEST_STAKE_NOPK (Id, num2, short, extended, exact) VALUES (?,?,?,?,?)");
@@ -81,11 +84,16 @@ public class DatabaseTest
 //              	System.out.println("Added");
 //              }
           }
+          
+          long endTime = System.currentTimeMillis();
+          long totalTime = endTime - startTime;
+          return totalTime;
       }
      
     public static void main(String args[]) throws Exception
     {
-    	System.out.println("Hello");
+    	int[] insertNoPK = new int[10];
+    	long time;
     	
     	/** 
     	    * Creates a connection to the database that you can then send commands to.
@@ -96,8 +104,26 @@ public class DatabaseTest
     	   /**
     	    * To get the meta data for the DB.
     	    */
-    	    DatabaseMetaData meta = m_dbConn.getMetaData();
-    	    
-    	    testNonSelectStatements();
+//    	    DatabaseMetaData meta = m_dbConn.getMetaData();
+//    	    
+//    	    for(int i = 0; i < 10; i++)
+//    	    {
+//    	    	remakeNoPKTable();
+//    	    	time = testNonSelectStatements();
+//    	    	insertNoPK[i] = (int) time / 1000;
+//    	    }
+//    	    
+//    	    for(int i = 0; i < 10; i++)
+//    	    {
+//    	    	System.out.println("Time for no PK insertion " + (i+1) + ": " + insertNoPK[i]);
+//    	    }
+    	    remakeNoPKTable();
     }
+
+	private static void remakeNoPKTable() throws Exception
+	{
+		String string = "DROP TABLE TEST_STAKE_NOPK;";
+        PreparedStatement statement = m_dbConn.prepareStatement(string);
+        statement.executeUpdate();
+	}
 }
