@@ -177,9 +177,30 @@ public class DatabaseTest
 
     private static void prepareDatabaseCache() throws Exception
     {
-    	String select = "SELECT * FROM TEST_STAKE_PK WHERE Id = 4806";
+    	String select = "SELECT * FROM TEST_STAKE_PK WHERE Id = 4806;";
         PreparedStatement statement = m_dbConn.prepareStatement(select);
-        System.out.println("Time for select from Id (col 1) : " + timeSingleStatement(statement));	
+        System.out.println("Time for select from Id (col 1), 1st: " + timeSingleStatement(statement));	
+        System.out.println("Time for select from Id (col 1), 2nd: " + timeSingleStatement(statement));
+        
+        select = "SELECT * FROM TEST_STAKE_PK WHERE num2 = 3568;";
+        statement = m_dbConn.prepareStatement(select);
+        System.out.println("Time for select from num2 (col 2), 1st: " + timeSingleStatement(statement));	
+        System.out.println("Time for select from num2 (col 2), 2nd: " + timeSingleStatement(statement));
+        
+        select = "SELECT * FROM TEST_STAKE_PK WHERE short = 'Check: 4';";
+        statement = m_dbConn.prepareStatement(select);
+        System.out.println("Time for select from short (col 3), 1st: " + timeSingleStatement(statement));	
+        System.out.println("Time for select from short (col 3), 2nd: " + timeSingleStatement(statement));
+        
+        select = "SELECT * FROM TEST_STAKE_PK WHERE extended = 'Extended Length 5;";
+        statement = m_dbConn.prepareStatement(select);
+        System.out.println("Time for select from extended (col 4), 1st: " + timeSingleStatement(statement));	
+        System.out.println("Time for select from extended (col 4), 2nd: " + timeSingleStatement(statement));
+        
+        select = "SELECT * FROM TEST_STAKE_PK WHERE exact > 3.1 AND exact < 3.8;";
+        statement = m_dbConn.prepareStatement(select);
+        System.out.println("Time for select from exact (col 5), 1st: " + timeSingleStatement(statement));	
+        System.out.println("Time for select from exact (col 5), 2nd: " + timeSingleStatement(statement));
 	}
 
 	//removes the no pk table if it exists and then recreates it as an empty table again
