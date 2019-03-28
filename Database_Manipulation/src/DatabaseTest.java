@@ -51,22 +51,34 @@ public class DatabaseTest
       {
           // Using a PreparedStatement to insert a value (best option when providing values
           // from variables).
-          // Use place holders '?' to mark where I am going to provide the data.
-    	  
-          String insertData = new String("INSERT INTO TEST_STAKE_NOPK (Id, num2, short, extended, exact) VALUES (?,?,?,?,?)");
-          PreparedStatement stmt2 = m_dbConn.prepareStatement(insertData);
-          stmt2.setString(1, "1");
-          stmt2.setString(2, "2");
-          stmt2.setString(3, "'hello'");
-          stmt2.setString(4, "'This is a longer string'");
-          stmt2.setString(5, "55.55");
-          
+          // Use place holders '?' to mark where I am going to provide the data.          
           // When I need to set a primitive type as null.
           //stmt2.setNull(2, java.sql.Types.INTEGER);
-          int rowsAdded = stmt2.executeUpdate();
-          if (rowsAdded == 1)
+    	  
+          int rowAdded;
+          String insertString;
+          PreparedStatement insertion;
+          String condition1, condition2, condition3, condition4, condition5;
+          for(int i = 0; i < 50; i++)
           {
-          	System.out.println("Added");
+        	  insertString = new String("INSERT INTO TEST_STAKE_NOPK (Id, num2, short, extended, exact) VALUES (?,?,?,?,?)");
+        	  insertion = m_dbConn.prepareStatement(insertString);
+        	  condition1 = Integer.toString(i+1);
+        	  condition2 = Integer.toString(i);
+        	  condition3 = "Check: " + i/1000;
+        	  condition4 = "Extended Length " + i/10000;
+        	  condition5 = Double.toString(i/1000 + (i/(double)10000 - i/10000));
+        	  insertion.setString(1, condition1);
+        	  insertion.setString(2, condition2);
+        	  insertion.setString(3, condition3);
+        	  insertion.setString(4, condition4);
+        	  insertion.setString(5, condition5);
+        	  
+        	  rowAdded = insertion.executeUpdate();
+              if (rowAdded == 1)
+              {
+              	System.out.println("Added");
+              }
           }
       }
      
