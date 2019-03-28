@@ -45,10 +45,8 @@ public class DatabaseTest
         return true;
     }
     
-     /**
-      * To execute an SQL statement that is not a SELECT statement.
-      */
-      public static long testNonSelectStatements() throws Exception
+      //Inserts rows into the no pk table
+      public static long testInsertionStatementsNoPK() throws Exception
       {
           // Using a PreparedStatement to insert a value (best option when providing values
           // from variables).
@@ -78,11 +76,46 @@ public class DatabaseTest
         	  insertion.setString(4, condition4);
         	  insertion.setString(5, condition5);
         	  
-        	  rowAdded = insertion.executeUpdate();
-//              if (rowAdded == 1)
-//              {
-//              	System.out.println("Added");
-//              }
+        	  insertion.executeUpdate();
+          }
+          
+          long endTime = System.currentTimeMillis();
+          long totalTime = endTime - startTime;
+          return totalTime;
+      }
+      
+      //Inserts rows into the pk table
+      public static long testInsertionStatementsPK() throws Exception
+      {
+          // Using a PreparedStatement to insert a value (best option when providing values
+          // from variables).
+          // Use place holders '?' to mark where I am going to provide the data.          
+          // When I need to set a primitive type as null.
+          //stmt2.setNull(2, java.sql.Types.INTEGER);
+    	  
+          int rowAdded;
+          String insertString;
+          PreparedStatement insertion;
+          String condition1, condition2, condition3, condition4, condition5;
+          
+          long startTime = System.currentTimeMillis();
+          
+          for(int i = 0; i < 5000; i++)
+          {
+        	  insertString = new String("INSERT INTO TEST_STAKE_PK (Id, num2, short, extended, exact) VALUES (?,?,?,?,?)");
+        	  insertion = m_dbConn.prepareStatement(insertString);
+        	  condition1 = Integer.toString(i+1);
+        	  condition2 = Integer.toString(i);
+        	  condition3 = "Check: " + i/1000;
+        	  condition4 = "Extended Length " + i/10000;
+        	  condition5 = Double.toString(i/1000 + (i/(double)10000 - i/10000));
+        	  insertion.setString(1, condition1);
+        	  insertion.setString(2, condition2);
+        	  insertion.setString(3, condition3);
+        	  insertion.setString(4, condition4);
+        	  insertion.setString(5, condition5);
+        	  
+        	  insertion.executeUpdate();
           }
           
           long endTime = System.currentTimeMillis();
@@ -109,7 +142,7 @@ public class DatabaseTest
     	    for(int i = 0; i < 10; i++)
     	    {
     	    	remakeNoPKTable();
-    	    	time = testNonSelectStatements();
+    	    	time = testInsertionStatementsNoPK();
     	    	insertNoPK[i] = time / (double)1000;
     	    	System.out.println("No PK insertion " + (i+1) + " complete.");
     	    }
@@ -118,14 +151,27 @@ public class DatabaseTest
     	    {
     	    	System.out.println("Time for no PK insertion " + (i+1) + ": " + insertNoPK[i]);
     	    }
+    	    remakePKTable();
     }
 
+    //removes the no pk table if it exists and then recreates it as an empty table again
 	private static void remakeNoPKTable() throws Exception
 	{
 		String string = "DROP TABLE IF EXISTS TEST_STAKE_NOPK;";
         PreparedStatement statement = m_dbConn.prepareStatement(string);
         statement.executeUpdate();
         string = "CREATE TABLE TEST_STAKE_NOPK (Id INT, num2 INT, short CHAR(10), extended VARCHAR(30), exact DOUBLE);";
+        statement = m_dbConn.prepareStatement(string);
+        statement.executeUpdate();
+	}
+	
+    //removes the pk table if it exists and then recreates it as an empty table again	
+	private static void remakePKTable() throws Exception
+	{
+		String string = "DROP TABLE IF EXISTS TEST_STAKE_PK;";
+        PreparedStatement statement = m_dbConn.prepareStatement(string);
+        statement.executeUpdate();
+        string = "CREATE TABLE TEST_STAKE_PK (Id INT, num2 INT, short CHAR(10), extended VARCHAR(30), exact DOUBLE, PRIMARY KEY(Id));";
         statement = m_dbConn.prepareStatement(string);
         statement.executeUpdate();
 	}
