@@ -172,7 +172,8 @@ public class DatabaseTest
 //    	    {
 //    	    	System.out.println("Time for PK insertion " + (i+1) + ": " + insertPK[i]);
 //    	    }
-    	    
+    	    remakePKTable();
+    	    testInsertionStatementsPK();
     	    prepareDatabaseCache();
     }
 
@@ -193,7 +194,7 @@ public class DatabaseTest
         System.out.println("Time for select from short (col 3), 1st: " + timeSingleStatement(statement));	
         System.out.println("Time for select from short (col 3), 2nd: " + timeSingleStatement(statement));
         
-        select = "SELECT * FROM TEST_STAKE_PK WHERE extended = 'Extended Length 5;";
+        select = "SELECT * FROM TEST_STAKE_PK WHERE extended = 'Extended Length 5';";
         statement = m_dbConn.prepareStatement(select);
         System.out.println("Time for select from extended (col 4), 1st: " + timeSingleStatement(statement));	
         System.out.println("Time for select from extended (col 4), 2nd: " + timeSingleStatement(statement));
