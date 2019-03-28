@@ -35,7 +35,7 @@ public class DatabaseTest
     /**
      * You MUST change these values based on the DB you are assigned to work with.
      */
-     public static final String DB_LOCATION = "jdbc:mysql://localhost/TEST_STAKE_NOPK";
+     public static final String DB_LOCATION = "jdbc:mysql://localhost/test";
      public static final String LOGIN_NAME = "andrew";
      public static final String PASSWORD = "an99Mi32st";   //TODO these are what need to be changed
      
