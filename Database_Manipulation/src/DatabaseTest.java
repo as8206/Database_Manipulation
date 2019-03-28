@@ -2,6 +2,7 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 //Tests and times various database functions
@@ -230,6 +231,10 @@ public class DatabaseTest
 		long starttime = System.currentTimeMillis();
 		statement.executeQuery();
 		long endtime = System.currentTimeMillis();
+		statement = m_dbConn.prepareStatement("SELECT FOUND_ROWS()");
+		ResultSet results = statement.executeQuery();
+		results.next();
+		System.out.println("Found " + results.getString(1) + "rows.");
 		return (endtime-starttime) / (double) 1000;
 	}
 }
