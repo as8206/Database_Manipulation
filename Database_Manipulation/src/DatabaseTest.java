@@ -3,10 +3,11 @@ import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 //Tests and times various database functions
 //Andrew Stake
+
+//Table Creation statement: CREATE TABLE TEST_STAKE_NOPK (Id INT, num2 INT, short CHAR(10), extended VARCHAR(30), exact DOUBLE);
 
 public class DatabaseTest
 {
@@ -59,7 +60,7 @@ public class DatabaseTest
           String insertString;
           PreparedStatement insertion;
           String condition1, condition2, condition3, condition4, condition5;
-          for(int i = 0; i < 50; i++)
+          for(int i = 0; i < 5000; i++)
           {
         	  insertString = new String("INSERT INTO TEST_STAKE_NOPK (Id, num2, short, extended, exact) VALUES (?,?,?,?,?)");
         	  insertion = m_dbConn.prepareStatement(insertString);
@@ -75,10 +76,10 @@ public class DatabaseTest
         	  insertion.setString(5, condition5);
         	  
         	  rowAdded = insertion.executeUpdate();
-              if (rowAdded == 1)
-              {
-              	System.out.println("Added");
-              }
+//              if (rowAdded == 1)
+//              {
+//              	System.out.println("Added");
+//              }
           }
       }
      
