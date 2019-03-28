@@ -124,6 +124,7 @@ public class DatabaseTest
           return totalTime;
       }
       
+      //times 100 select statements on the primary key column
       public static long testSelectsPKCol() throws Exception
       {
     	  String select = "SELECT * FROM TEST_STAKE_PK WHERE Id = ?;";
@@ -142,15 +143,31 @@ public class DatabaseTest
           return totalTime;
       }
       
-      public static long testSelectsNoPkCol()
+      //times 100 select statements on the non primary key column
+      public static long testSelectsNoPkCol() throws Exception
       {
-    	  return 0;
+    	  String select = "SELECT * FROM TEST_STAKE_PK WHERE num2 = ?;";
+          PreparedStatement statement = m_dbConn.prepareStatement(select);
+          
+          long startTime = System.currentTimeMillis();
+          
+          for(int i = 0; i < 100; i++)
+          {
+        	  statement.setString(1, Integer.toString((int) (Math.random() * 5000 + 1)));
+        	  statement.executeQuery();
+          }
+    	  
+          long endTime = System.currentTimeMillis();
+          long totalTime = endTime - startTime;
+          return totalTime;
       }
      
     public static void main(String args[]) throws Exception
     {
     	double[] insertNoPK = new double[10];
     	double[] insertPK = new double[10];
+    	double[] selectPK = new double[10];
+    	double[] selectNoPK = new double[10];
     	long time;
     	
     	/** 
@@ -195,9 +212,39 @@ public class DatabaseTest
 //    	    {
 //    	    	System.out.println("Time for PK insertion " + (i+1) + ": " + insertPK[i]);
 //    	    }
-    	    prepareDatabaseCache();
+//    	    
+//    	    //Does 5 pairs of select statements to prepare the database cache
+//    	    prepareDatabaseCache();
     	    
-    	    System.out.println(testSelectsPKCol());
+    	    /**
+    	     * Performs the select test on the pk column 10 times
+    	     */
+    	    for(int i = 0; i < 10; i++)
+    	    {
+    	    	time = testSelectsPKCol();
+    	    	selectPK[i] = time / (double)1000;
+    	    	System.out.println("PK select group " + (i+1) + " complete.");
+    	    }
+    	    
+    	    for(int i = 0; i < 10; i++)
+    	    {
+    	    	System.out.println("Time for PK select group " + (i+1) + ": " + selectPK[i]);
+    	    }
+    	    
+    	    /**
+    	     * Performs the select test on the non pk column 10 times
+    	     */
+    	    for(int i = 0; i < 10; i++)
+    	    {
+    	    	time = testSelectsNoPkCol();
+    	    	selectNoPK[i] = time / (double)1000;
+    	    	System.out.println("Non PK select group " + (i+1) + " complete.");
+    	    }
+    	    
+    	    for(int i = 0; i < 10; i++)
+    	    {
+    	    	System.out.println("Time for Non PK select group " + (i+1) + ": " + selectNoPK[i]);
+    	    }
     }
 
     private static void prepareDatabaseCache() throws Exception
