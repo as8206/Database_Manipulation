@@ -171,9 +171,18 @@ public class DatabaseTest
     	    {
     	    	System.out.println("Time for PK insertion " + (i+1) + ": " + insertPK[i]);
     	    }
+    	    
+    	    prepareDatabaseCache();
     }
 
-    //removes the no pk table if it exists and then recreates it as an empty table again
+    private static void prepareDatabaseCache() throws Exception
+    {
+    	String select = "SELECT FROM TEST_STAKE_PK WHERE Id = 4806";
+        PreparedStatement statement = m_dbConn.prepareStatement(select);
+        statement.executeUpdate();		
+	}
+
+	//removes the no pk table if it exists and then recreates it as an empty table again
 	private static void remakeNoPKTable() throws Exception
 	{
 		String string = "DROP TABLE IF EXISTS TEST_STAKE_NOPK;";
@@ -193,5 +202,13 @@ public class DatabaseTest
         string = "CREATE TABLE TEST_STAKE_PK (Id INT, num2 INT, short CHAR(10), extended VARCHAR(30), exact DOUBLE, PRIMARY KEY(Id));";
         statement = m_dbConn.prepareStatement(string);
         statement.executeUpdate();
+	}
+	
+	private static double timeSingleStatement(PreparedStatement statement) throws Exception
+	{
+		long starttime = System.currentTimeMillis();
+		statement.executeUpdate();
+		long endtime = System.currentTimeMillis();
+		return (endtime-starttime) / (double) 1000;
 	}
 }
