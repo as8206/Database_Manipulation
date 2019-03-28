@@ -126,6 +126,7 @@ public class DatabaseTest
     public static void main(String args[]) throws Exception
     {
     	double[] insertNoPK = new double[10];
+    	double[] insertPK = new double[10];
     	long time;
     	
     	/** 
@@ -139,6 +140,9 @@ public class DatabaseTest
     	    */
     	    DatabaseMetaData meta = m_dbConn.getMetaData();
     	    
+    	    /**
+    	     * Performs the insertion test on the no pk table 10 times
+    	     */
     	    for(int i = 0; i < 10; i++)
     	    {
     	    	remakeNoPKTable();
@@ -151,7 +155,22 @@ public class DatabaseTest
     	    {
     	    	System.out.println("Time for no PK insertion " + (i+1) + ": " + insertNoPK[i]);
     	    }
-    	    remakePKTable();
+    	    
+    	    /**
+    	     * Performs the insertion test on the pk table 10 times
+    	     */
+    	    for(int i = 0; i < 10; i++)
+    	    {
+    	    	remakePKTable();
+    	    	time = testInsertionStatementsPK();
+    	    	insertPK[i] = time / (double)1000;
+    	    	System.out.println("PK insertion " + (i+1) + " complete.");
+    	    }
+    	    
+    	    for(int i = 0; i < 10; i++)
+    	    {
+    	    	System.out.println("Time for PK insertion " + (i+1) + ": " + insertNoPK[i]);
+    	    }
     }
 
     //removes the no pk table if it exists and then recreates it as an empty table again
