@@ -181,40 +181,40 @@ public class DatabaseTest
     	    */
     	    DatabaseMetaData meta = m_dbConn.getMetaData();
     	    
-//    	    /**
-//    	     * Performs the insertion test on the no pk table 10 times
-//    	     */
-//    	    for(int i = 0; i < 10; i++)
-//    	    {
-//    	    	remakeNoPKTable();
-//    	    	time = testInsertionStatementsNoPK();
-//    	    	insertNoPK[i] = time / (double)1000;
-//    	    	System.out.println("No PK insertion " + (i+1) + " complete.");
-//    	    }
-//    	    
-//    	    for(int i = 0; i < 10; i++)
-//    	    {
-//    	    	System.out.println("Time for no PK insertion " + (i+1) + ": " + insertNoPK[i]);
-//    	    }
-//    	    
-//    	    /**
-//    	     * Performs the insertion test on the pk table 10 times
-//    	     */
-//    	    for(int i = 0; i < 10; i++)
-//    	    {
-//    	    	remakePKTable();
-//    	    	time = testInsertionStatementsPK();
-//    	    	insertPK[i] = time / (double)1000;
-//    	    	System.out.println("PK insertion " + (i+1) + " complete.");
-//    	    }
-//    	    
-//    	    for(int i = 0; i < 10; i++)
-//    	    {
-//    	    	System.out.println("Time for PK insertion " + (i+1) + ": " + insertPK[i]);
-//    	    }
-//    	    
-//    	    //Does 5 pairs of select statements to prepare the database cache
-//    	    prepareDatabaseCache();
+    	    /**
+    	     * Performs the insertion test on the no pk table 10 times
+    	     */
+    	    for(int i = 0; i < 10; i++)
+    	    {
+    	    	remakeNoPKTable();
+    	    	time = testInsertionStatementsNoPK();
+    	    	insertNoPK[i] = time / (double)1000;
+    	    	System.out.println("No PK insertion " + (i+1) + " complete.");
+    	    }
+    	    
+    	    for(int i = 0; i < 10; i++)
+    	    {
+    	    	System.out.println("Time for no PK insertion " + (i+1) + ": " + insertNoPK[i]);
+    	    }
+    	    
+    	    /**
+    	     * Performs the insertion test on the pk table 10 times
+    	     */
+    	    for(int i = 0; i < 10; i++)
+    	    {
+    	    	remakePKTable();
+    	    	time = testInsertionStatementsPK();
+    	    	insertPK[i] = time / (double)1000;
+    	    	System.out.println("PK insertion " + (i+1) + " complete.");
+    	    }
+    	    
+    	    for(int i = 0; i < 10; i++)
+    	    {
+    	    	System.out.println("Time for PK insertion " + (i+1) + ": " + insertPK[i]);
+    	    }
+    	    
+    	    //Does 5 pairs of select statements to prepare the database cache
+    	    prepareDatabaseCache();
     	    
     	    /**
     	     * Performs the select test on the pk column 10 times
