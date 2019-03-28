@@ -140,37 +140,37 @@ public class DatabaseTest
     	    */
     	    DatabaseMetaData meta = m_dbConn.getMetaData();
     	    
-    	    /**
-    	     * Performs the insertion test on the no pk table 10 times
-    	     */
-    	    for(int i = 0; i < 10; i++)
-    	    {
-    	    	remakeNoPKTable();
-    	    	time = testInsertionStatementsNoPK();
-    	    	insertNoPK[i] = time / (double)1000;
-    	    	System.out.println("No PK insertion " + (i+1) + " complete.");
-    	    }
-    	    
-    	    for(int i = 0; i < 10; i++)
-    	    {
-    	    	System.out.println("Time for no PK insertion " + (i+1) + ": " + insertNoPK[i]);
-    	    }
-    	    
-    	    /**
-    	     * Performs the insertion test on the pk table 10 times
-    	     */
-    	    for(int i = 0; i < 10; i++)
-    	    {
-    	    	remakePKTable();
-    	    	time = testInsertionStatementsPK();
-    	    	insertPK[i] = time / (double)1000;
-    	    	System.out.println("PK insertion " + (i+1) + " complete.");
-    	    }
-    	    
-    	    for(int i = 0; i < 10; i++)
-    	    {
-    	    	System.out.println("Time for PK insertion " + (i+1) + ": " + insertPK[i]);
-    	    }
+//    	    /**
+//    	     * Performs the insertion test on the no pk table 10 times
+//    	     */
+//    	    for(int i = 0; i < 10; i++)
+//    	    {
+//    	    	remakeNoPKTable();
+//    	    	time = testInsertionStatementsNoPK();
+//    	    	insertNoPK[i] = time / (double)1000;
+//    	    	System.out.println("No PK insertion " + (i+1) + " complete.");
+//    	    }
+//    	    
+//    	    for(int i = 0; i < 10; i++)
+//    	    {
+//    	    	System.out.println("Time for no PK insertion " + (i+1) + ": " + insertNoPK[i]);
+//    	    }
+//    	    
+//    	    /**
+//    	     * Performs the insertion test on the pk table 10 times
+//    	     */
+//    	    for(int i = 0; i < 10; i++)
+//    	    {
+//    	    	remakePKTable();
+//    	    	time = testInsertionStatementsPK();
+//    	    	insertPK[i] = time / (double)1000;
+//    	    	System.out.println("PK insertion " + (i+1) + " complete.");
+//    	    }
+//    	    
+//    	    for(int i = 0; i < 10; i++)
+//    	    {
+//    	    	System.out.println("Time for PK insertion " + (i+1) + ": " + insertPK[i]);
+//    	    }
     	    
     	    prepareDatabaseCache();
     }
@@ -179,7 +179,7 @@ public class DatabaseTest
     {
     	String select = "SELECT FROM TEST_STAKE_PK WHERE Id = 4806";
         PreparedStatement statement = m_dbConn.prepareStatement(select);
-        statement.executeUpdate();		
+        System.out.println("Time for select from Id (col 1) : " + timeSingleStatement(statement));	
 	}
 
 	//removes the no pk table if it exists and then recreates it as an empty table again
