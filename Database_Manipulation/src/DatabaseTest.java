@@ -17,7 +17,7 @@ public class DatabaseTest
      */
      public static final String DB_LOCATION = "jdbc:mysql://db.cs.ship.edu:3306/csc371_33";
      public static final String LOGIN_NAME = "csc371_33";
-     public static final String PASSWORD = "Password33";   //TODO change to correct Database
+     public static final String PASSWORD = "Password33";   
      
      // Make sure and use the java.sql imports.
      protected static Connection m_dbConn = null;
@@ -49,7 +49,7 @@ public class DatabaseTest
      	    	remakeNoPKTable();
      	    	time = testInsertionStatementsNoPK();
      	    	insertNoPK[i] = time / (double)1000;
-     	    	System.out.println("No PK insertion " + (i+1) + " complete.");
+     	    	System.out.println("No PK insertion " + (i+1) + " complete: " + insertNoPK[i] + " seconds.");
      	    }
      	    
      	    for(int i = 0; i < 10; i++)
@@ -65,7 +65,7 @@ public class DatabaseTest
      	    	remakePKTable();
      	    	time = testInsertionStatementsPK();
      	    	insertPK[i] = time / (double)1000;
-     	    	System.out.println("PK insertion " + (i+1) + " complete.");
+     	    	System.out.println("PK insertion " + (i+1) + " complete: " + insertPK[i] + " seconds.");
      	    }
      	    
      	    for(int i = 0; i < 10; i++)
@@ -147,7 +147,7 @@ public class DatabaseTest
           
          long startTime = System.currentTimeMillis();
          
-         for(int i = 0; i < 5000; i++) //TODO set to 500000
+         for(int i = 0; i < 500000; i++)
          {
         	  insertString = new String("INSERT INTO TEST_STAKE_NOPK (Id, num2, short, extended, exact) VALUES (?,?,?,?,?)");
         	  insertion = m_dbConn.prepareStatement(insertString);
@@ -186,7 +186,7 @@ public class DatabaseTest
           
           long startTime = System.currentTimeMillis();
           
-          for(int i = 0; i < 5000; i++) //TODO set to 500000
+          for(int i = 0; i < 500000; i++)
           {
         	  insertString = new String("INSERT INTO TEST_STAKE_PK (Id, num2, short, extended, exact) VALUES (?,?,?,?,?)");
         	  insertion = m_dbConn.prepareStatement(insertString);
@@ -219,7 +219,7 @@ public class DatabaseTest
           
           for(int i = 0; i < 100; i++)
           {
-        	  statement.setString(1, Integer.toString((int) (Math.random() * 5000 + 1))); //TODO change to 500000
+        	  statement.setString(1, Integer.toString((int) (Math.random() * 500000 + 1)));
         	  statement.executeQuery();
           }
     	  
@@ -238,7 +238,7 @@ public class DatabaseTest
           
           for(int i = 0; i < 100; i++)
           {
-        	  statement.setString(1, Integer.toString((int) (Math.random() * 5000 + 1))); //TODO change to 500000
+        	  statement.setString(1, Integer.toString((int) (Math.random() * 500000 + 1)));
         	  statement.executeQuery();
           }
     	  
@@ -250,35 +250,35 @@ public class DatabaseTest
       //performs 5 pairs of selects to prepare the cache
       private static void prepareDatabaseCache() throws Exception //TODO change values to be more suited to 500000 rows
       {
-    	  String select = "SELECT * FROM TEST_STAKE_PK WHERE Id = 4806;";
+    	  String select = "SELECT * FROM TEST_STAKE_PK WHERE Id = 48806;";
     	  PreparedStatement statement = m_dbConn.prepareStatement(select);
     	  System.out.println("Time for select from Id (col 1), 1st: " + timeSingleStatement(statement));
 	      System.out.println();
 	      System.out.println("Time for select from Id (col 1), 2nd: " + timeSingleStatement(statement));
 	      System.out.println();
 	       
-	      select = "SELECT * FROM TEST_STAKE_PK WHERE num2 = 3568;";
+	      select = "SELECT * FROM TEST_STAKE_PK WHERE num2 = 356568;";
 	      statement = m_dbConn.prepareStatement(select);
 	      System.out.println("Time for select from num2 (col 2), 1st: " + timeSingleStatement(statement));
 	      System.out.println();
 	      System.out.println("Time for select from num2 (col 2), 2nd: " + timeSingleStatement(statement));
 	      System.out.println();
 	       
-	      select = "SELECT * FROM TEST_STAKE_PK WHERE short = 'Check: 4';";
+	      select = "SELECT * FROM TEST_STAKE_PK WHERE short = 'Check: 11';";
 	      statement = m_dbConn.prepareStatement(select);
 	      System.out.println("Time for select from short (col 3), 1st: " + timeSingleStatement(statement));
 	      System.out.println();
 	      System.out.println("Time for select from short (col 3), 2nd: " + timeSingleStatement(statement));
 	      System.out.println();
 	      
-	      select = "SELECT * FROM TEST_STAKE_PK WHERE extended = 'Extended Length 5';";
+	      select = "SELECT * FROM TEST_STAKE_PK WHERE extended = 'Extended Length 23';";
 	      statement = m_dbConn.prepareStatement(select);
 	      System.out.println("Time for select from extended (col 4), 1st: " + timeSingleStatement(statement));
 	      System.out.println();
 	      System.out.println("Time for select from extended (col 4), 2nd: " + timeSingleStatement(statement));
 	      System.out.println();
 	      
-	      select = "SELECT * FROM TEST_STAKE_PK WHERE exact > 3.1 AND exact < 3.8;";
+	      select = "SELECT * FROM TEST_STAKE_PK WHERE exact > 35 AND exact < 35.4;";
 	      statement = m_dbConn.prepareStatement(select);
 	      System.out.println("Time for select from exact (col 5), 1st: " + timeSingleStatement(statement));
 	      System.out.println();
