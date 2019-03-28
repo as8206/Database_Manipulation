@@ -21,6 +21,91 @@ public class DatabaseTest
      
      // Make sure and use the java.sql imports.
      protected static Connection m_dbConn = null;
+     
+     public static void main(String args[]) throws Exception
+     {
+     	double[] insertNoPK = new double[10];
+     	double[] insertPK = new double[10];
+     	double[] selectPK = new double[10];
+     	double[] selectNoPK = new double[10];
+     	long time;
+     	
+     	/** 
+     	    * Creates a connection to the database that you can then send commands to.
+     	    */
+     	    m_dbConn = DriverManager.getConnection(DB_LOCATION, LOGIN_NAME, PASSWORD);
+     	    
+
+     	   /**
+     	    * To get the meta data for the DB.
+     	    */
+     	    DatabaseMetaData meta = m_dbConn.getMetaData();
+     	    
+     	    /**
+     	     * Performs the insertion test on the no pk table 10 times
+     	     */
+     	    for(int i = 0; i < 10; i++)
+     	    {
+     	    	remakeNoPKTable();
+     	    	time = testInsertionStatementsNoPK();
+     	    	insertNoPK[i] = time / (double)1000;
+     	    	System.out.println("No PK insertion " + (i+1) + " complete.");
+     	    }
+     	    
+     	    for(int i = 0; i < 10; i++)
+     	    {
+     	    	System.out.println("Time for no PK insertion " + (i+1) + ": " + insertNoPK[i]);
+     	    }
+     	    
+     	    /**
+     	     * Performs the insertion test on the pk table 10 times
+     	     */
+     	    for(int i = 0; i < 10; i++)
+     	    {
+     	    	remakePKTable();
+     	    	time = testInsertionStatementsPK();
+     	    	insertPK[i] = time / (double)1000;
+     	    	System.out.println("PK insertion " + (i+1) + " complete.");
+     	    }
+     	    
+     	    for(int i = 0; i < 10; i++)
+     	    {
+     	    	System.out.println("Time for PK insertion " + (i+1) + ": " + insertPK[i]);
+     	    }
+     	    
+     	    //Does 5 pairs of select statements to prepare the database cache
+     	    prepareDatabaseCache();
+     	    
+     	    /**
+     	     * Performs the select test on the pk column 10 times
+     	     */
+     	    for(int i = 0; i < 10; i++)
+     	    {
+     	    	time = testSelectsPKCol();
+     	    	selectPK[i] = time / (double)1000;
+     	    	System.out.println("PK select group " + (i+1) + " complete.");
+     	    }
+     	    
+     	    for(int i = 0; i < 10; i++)
+     	    {
+     	    	System.out.println("Time for PK select group " + (i+1) + ": " + selectPK[i]);
+     	    }
+     	    
+     	    /**
+     	     * Performs the select test on the non pk column 10 times
+     	     */
+     	    for(int i = 0; i < 10; i++)
+     	    {
+     	    	time = testSelectsNoPkCol();
+     	    	selectNoPK[i] = time / (double)1000;
+     	    	System.out.println("Non PK select group " + (i+1) + " complete.");
+     	    }
+     	    
+     	    for(int i = 0; i < 10; i++)
+     	    {
+     	    	System.out.println("Time for Non PK select group " + (i+1) + ": " + selectNoPK[i]);
+     	    }
+     }
 	
 	/**
      * This is the recommended way to activate the JDBC drivers, but is
@@ -32,8 +117,8 @@ public class DatabaseTest
      * 
      * @return Returns true if it successfully sets up the driver.
      */
-    public boolean activateJDBC()
-    {
+     public boolean activateJDBC()
+     {
         try
         {
             DriverManager.registerDriver(new com.mysql.jdbc.Driver());
@@ -44,26 +129,26 @@ public class DatabaseTest
         }
 
         return true;
-    }
+     }
     
-      //Inserts rows into the no pk table
-      public static long testInsertionStatementsNoPK() throws Exception
-      {
-          // Using a PreparedStatement to insert a value (best option when providing values
-          // from variables).
-          // Use place holders '?' to mark where I am going to provide the data.          
-          // When I need to set a primitive type as null.
-          //stmt2.setNull(2, java.sql.Types.INTEGER);
+     //Inserts rows into the no pk table
+     public static long testInsertionStatementsNoPK() throws Exception
+     {
+         // Using a PreparedStatement to insert a value (best option when providing values
+         // from variables).
+         // Use place holders '?' to mark where I am going to provide the data.          
+         // When I need to set a primitive type as null.
+         //stmt2.setNull(2, java.sql.Types.INTEGER);
     	  
-          int rowAdded;
-          String insertString;
-          PreparedStatement insertion;
-          String condition1, condition2, condition3, condition4, condition5;
+         int rowAdded;
+         String insertString;
+         PreparedStatement insertion;
+         String condition1, condition2, condition3, condition4, condition5;
           
-          long startTime = System.currentTimeMillis();
-          
-          for(int i = 0; i < 5000; i++) //TODO set to 500000
-          {
+         long startTime = System.currentTimeMillis();
+         
+         for(int i = 0; i < 5000; i++) //TODO set to 500000
+         {
         	  insertString = new String("INSERT INTO TEST_STAKE_NOPK (Id, num2, short, extended, exact) VALUES (?,?,?,?,?)");
         	  insertion = m_dbConn.prepareStatement(insertString);
         	  condition1 = Integer.toString(i+1);
@@ -78,11 +163,11 @@ public class DatabaseTest
         	  insertion.setString(5, condition5);
         	  
         	  insertion.executeUpdate();
-          }
+         }
           
-          long endTime = System.currentTimeMillis();
-          long totalTime = endTime - startTime;
-          return totalTime;
+         long endTime = System.currentTimeMillis();
+         long totalTime = endTime - startTime;
+         return totalTime;
       }
       
       //Inserts rows into the pk table
@@ -134,7 +219,7 @@ public class DatabaseTest
           
           for(int i = 0; i < 100; i++)
           {
-        	  statement.setString(1, Integer.toString((int) (Math.random() * 5000 + 1)));
+        	  statement.setString(1, Integer.toString((int) (Math.random() * 5000 + 1))); //TODO change to 500000
         	  statement.executeQuery();
           }
     	  
@@ -153,7 +238,7 @@ public class DatabaseTest
           
           for(int i = 0; i < 100; i++)
           {
-        	  statement.setString(1, Integer.toString((int) (Math.random() * 5000 + 1)));
+        	  statement.setString(1, Integer.toString((int) (Math.random() * 5000 + 1))); //TODO change to 500000
         	  statement.executeQuery();
           }
     	  
@@ -161,129 +246,45 @@ public class DatabaseTest
           long totalTime = endTime - startTime;
           return totalTime;
       }
-     
-    public static void main(String args[]) throws Exception
-    {
-    	double[] insertNoPK = new double[10];
-    	double[] insertPK = new double[10];
-    	double[] selectPK = new double[10];
-    	double[] selectNoPK = new double[10];
-    	long time;
-    	
-    	/** 
-    	    * Creates a connection to the database that you can then send commands to.
-    	    */
-    	    m_dbConn = DriverManager.getConnection(DB_LOCATION, LOGIN_NAME, PASSWORD);
-    	    
 
-    	   /**
-    	    * To get the meta data for the DB.
-    	    */
-    	    DatabaseMetaData meta = m_dbConn.getMetaData();
-    	    
-    	    /**
-    	     * Performs the insertion test on the no pk table 10 times
-    	     */
-    	    for(int i = 0; i < 10; i++)
-    	    {
-    	    	remakeNoPKTable();
-    	    	time = testInsertionStatementsNoPK();
-    	    	insertNoPK[i] = time / (double)1000;
-    	    	System.out.println("No PK insertion " + (i+1) + " complete.");
-    	    }
-    	    
-    	    for(int i = 0; i < 10; i++)
-    	    {
-    	    	System.out.println("Time for no PK insertion " + (i+1) + ": " + insertNoPK[i]);
-    	    }
-    	    
-    	    /**
-    	     * Performs the insertion test on the pk table 10 times
-    	     */
-    	    for(int i = 0; i < 10; i++)
-    	    {
-    	    	remakePKTable();
-    	    	time = testInsertionStatementsPK();
-    	    	insertPK[i] = time / (double)1000;
-    	    	System.out.println("PK insertion " + (i+1) + " complete.");
-    	    }
-    	    
-    	    for(int i = 0; i < 10; i++)
-    	    {
-    	    	System.out.println("Time for PK insertion " + (i+1) + ": " + insertPK[i]);
-    	    }
-    	    
-    	    //Does 5 pairs of select statements to prepare the database cache
-    	    prepareDatabaseCache();
-    	    
-    	    /**
-    	     * Performs the select test on the pk column 10 times
-    	     */
-    	    for(int i = 0; i < 10; i++)
-    	    {
-    	    	time = testSelectsPKCol();
-    	    	selectPK[i] = time / (double)1000;
-    	    	System.out.println("PK select group " + (i+1) + " complete.");
-    	    }
-    	    
-    	    for(int i = 0; i < 10; i++)
-    	    {
-    	    	System.out.println("Time for PK select group " + (i+1) + ": " + selectPK[i]);
-    	    }
-    	    
-    	    /**
-    	     * Performs the select test on the non pk column 10 times
-    	     */
-    	    for(int i = 0; i < 10; i++)
-    	    {
-    	    	time = testSelectsNoPkCol();
-    	    	selectNoPK[i] = time / (double)1000;
-    	    	System.out.println("Non PK select group " + (i+1) + " complete.");
-    	    }
-    	    
-    	    for(int i = 0; i < 10; i++)
-    	    {
-    	    	System.out.println("Time for Non PK select group " + (i+1) + ": " + selectNoPK[i]);
-    	    }
-    }
-
-    private static void prepareDatabaseCache() throws Exception
-    {
-    	String select = "SELECT * FROM TEST_STAKE_PK WHERE Id = 4806;";
-        PreparedStatement statement = m_dbConn.prepareStatement(select);
-        System.out.println("Time for select from Id (col 1), 1st: " + timeSingleStatement(statement));
-        System.out.println();
-        System.out.println("Time for select from Id (col 1), 2nd: " + timeSingleStatement(statement));
-        System.out.println();
-        
-        select = "SELECT * FROM TEST_STAKE_PK WHERE num2 = 3568;";
-        statement = m_dbConn.prepareStatement(select);
-        System.out.println("Time for select from num2 (col 2), 1st: " + timeSingleStatement(statement));
-        System.out.println();
-        System.out.println("Time for select from num2 (col 2), 2nd: " + timeSingleStatement(statement));
-        System.out.println();
-        
-        select = "SELECT * FROM TEST_STAKE_PK WHERE short = 'Check: 4';";
-        statement = m_dbConn.prepareStatement(select);
-        System.out.println("Time for select from short (col 3), 1st: " + timeSingleStatement(statement));
-        System.out.println();
-        System.out.println("Time for select from short (col 3), 2nd: " + timeSingleStatement(statement));
-        System.out.println();
-        
-        select = "SELECT * FROM TEST_STAKE_PK WHERE extended = 'Extended Length 5';";
-        statement = m_dbConn.prepareStatement(select);
-        System.out.println("Time for select from extended (col 4), 1st: " + timeSingleStatement(statement));
-        System.out.println();
-        System.out.println("Time for select from extended (col 4), 2nd: " + timeSingleStatement(statement));
-        System.out.println();
-        
-        select = "SELECT * FROM TEST_STAKE_PK WHERE exact > 3.1 AND exact < 3.8;";
-        statement = m_dbConn.prepareStatement(select);
-        System.out.println("Time for select from exact (col 5), 1st: " + timeSingleStatement(statement));
-        System.out.println();
-        System.out.println("Time for select from exact (col 5), 2nd: " + timeSingleStatement(statement));
-        System.out.println();
-	}
+      //performs 5 pairs of selects to prepare the cache
+      private static void prepareDatabaseCache() throws Exception //TODO change values to be more suited to 500000 rows
+      {
+    	  String select = "SELECT * FROM TEST_STAKE_PK WHERE Id = 4806;";
+    	  PreparedStatement statement = m_dbConn.prepareStatement(select);
+    	  System.out.println("Time for select from Id (col 1), 1st: " + timeSingleStatement(statement));
+	      System.out.println();
+	      System.out.println("Time for select from Id (col 1), 2nd: " + timeSingleStatement(statement));
+	      System.out.println();
+	       
+	      select = "SELECT * FROM TEST_STAKE_PK WHERE num2 = 3568;";
+	      statement = m_dbConn.prepareStatement(select);
+	      System.out.println("Time for select from num2 (col 2), 1st: " + timeSingleStatement(statement));
+	      System.out.println();
+	      System.out.println("Time for select from num2 (col 2), 2nd: " + timeSingleStatement(statement));
+	      System.out.println();
+	       
+	      select = "SELECT * FROM TEST_STAKE_PK WHERE short = 'Check: 4';";
+	      statement = m_dbConn.prepareStatement(select);
+	      System.out.println("Time for select from short (col 3), 1st: " + timeSingleStatement(statement));
+	      System.out.println();
+	      System.out.println("Time for select from short (col 3), 2nd: " + timeSingleStatement(statement));
+	      System.out.println();
+	      
+	      select = "SELECT * FROM TEST_STAKE_PK WHERE extended = 'Extended Length 5';";
+	      statement = m_dbConn.prepareStatement(select);
+	      System.out.println("Time for select from extended (col 4), 1st: " + timeSingleStatement(statement));
+	      System.out.println();
+	      System.out.println("Time for select from extended (col 4), 2nd: " + timeSingleStatement(statement));
+	      System.out.println();
+	      
+	      select = "SELECT * FROM TEST_STAKE_PK WHERE exact > 3.1 AND exact < 3.8;";
+	      statement = m_dbConn.prepareStatement(select);
+	      System.out.println("Time for select from exact (col 5), 1st: " + timeSingleStatement(statement));
+	      System.out.println();
+	      System.out.println("Time for select from exact (col 5), 2nd: " + timeSingleStatement(statement));
+	      System.out.println();
+      }
 
 	//removes the no pk table if it exists and then recreates it as an empty table again
 	private static void remakeNoPKTable() throws Exception
