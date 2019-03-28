@@ -125,5 +125,8 @@ public class DatabaseTest
 		String string = "DROP TABLE TEST_STAKE_NOPK;";
         PreparedStatement statement = m_dbConn.prepareStatement(string);
         statement.executeUpdate();
+        string = "CREATE TABLE TEST_STAKE_NOPK (Id INT, num2 INT, short CHAR(10), extended VARCHAR(30), exact DOUBLE);";
+        statement = m_dbConn.prepareStatement(string);
+        statement.executeUpdate();
 	}
 }
